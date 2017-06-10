@@ -112,7 +112,7 @@ Module utils
 
         Dim retFile As String = dir + "\" + logs(logs.Length - 1).ToString
 
-        For idx = 0 To logs.Length - 1
+        For idx = Math.Max(0, logs.Length - 20) To logs.Length - 1
             Dim fileName As String = logs(idx).ToString
 
             Dim creationTime As Date = My.Computer.FileSystem.GetFileInfo(dir + "\" + fileName).CreationTime()
@@ -129,7 +129,7 @@ Module utils
             End If
         Next
 
-        Controller.LogFilesList.SelectedIndex = logs.Length - 1
+        Controller.LogFilesList.SelectedIndex = Controller.LogFilesList.Items.Count - 1
 
         Return retFile
     End Function
@@ -196,5 +196,113 @@ Module utils
             My.Computer.FileSystem.DeleteFile(gCrashLog)
         End If
     End Sub
+
+    'dumps data
+    Public Sub DumpData()
+        'first copy the file temporarily
+        Dim curFile As String = LoadLogFiles(Controller.ClaymoreFdLabel.Text)
+        Dim tempFile As String = My.Application.Info.DirectoryPath + "\temp.txt"
+        My.Computer.FileSystem.CopyFile(curFile, tempFile, True)
+
+        'text stream
+        Dim sRead As Stream = File.OpenRead(tempFile)
+        Dim sReader As StreamReader = New StreamReader(sRead, Text.Encoding.ASCII)
+
+        ' set the file pointer to the beginning
+        sReader.BaseStream.Seek(0, SeekOrigin.Begin)
+        Dim pos As Integer = Math.Max(sReader.BaseStream.Length - 50000, 0)
+        sReader.BaseStream.Position = pos
+
+        'get last 50000 char
+        Dim buffer(50000) As Char
+        sReader.Read(buffer, 0, (sReader.BaseStream.Length - sReader.BaseStream.Position))
+        Dim data As String = buffer
+        sReader.DiscardBufferedData()
+        sReader.Close()
+
+        'dump data into a temp file
+        FileOpen(1, tempFile, OpenMode.Output)
+        Print(1, data + Environment.NewLine)
+        FileClose(1)
+
+        Dim startLine As Integer = 0
+        Dim endLine As Integer = 0
+
+        ' Open the file to read from.
+        Dim readText() As String = File.ReadAllLines(tempFile)
+        For idx = 0 To readText.Length - 1
+            Dim line As String = readText(idx)
+
+            If line.Contains("GPU0 t=") = True Then
+                startLine = endLine
+                endLine = idx + 1
+            End If
+        Next
+
+        'print requred info in dump file
+        FileOpen(1, gDataLog, OpenMode.Output)
+
+        Print(1, "<html>" + Environment.NewLine)
+        Print(1, "<head>" + Environment.NewLine)
+        Print(1, "<title>" + Controller.WorkerNameTb.Text + "</title>" + Environment.NewLine)
+        Print(1, "<body>" + Environment.NewLine)
+
+        For idx = startLine - 1 To endLine - 2
+            Dim line As String = readText(idx)
+
+            'gpu temp
+            If DumpOneLineData(line, "GPU0 t=", 1, "FF0000") = True Then
+                Print(1, "<br>" + Environment.NewLine)
+                Continue For
+            End If
+
+            'ETH total hashrate
+            If DumpOneLineData(line, "ETH - Total Speed:", 1, "0000FF") = True Then
+                Continue For
+            End If
+
+            'ETH hashrate in different gpus
+            If DumpOneLineData(line, "ETH: GPU0", 1, "008080") = True Then
+                Print(1, "<br>" + Environment.NewLine)
+                Continue For
+            End If
+
+            'PASC total hashrate
+            If DumpOneLineData(line, "PASC - Total Speed:", 1, "0000FF") = True Then
+                Continue For
+            End If
+
+            'PASC hashrate in different gpus
+            If DumpOneLineData(line, "PASC: GPU0", 1, "008080") = True Then
+                Print(1, "<br>" + Environment.NewLine)
+                Continue For
+            End If
+        Next
+
+        Print(1, "</body>" + Environment.NewLine)
+        Print(1, "</html>" + Environment.NewLine)
+
+        FileClose(1)
+
+        'delete temp file
+        My.Computer.FileSystem.DeleteFile(tempFile)
+    End Sub
+
+    'dump one line in html file
+    Private Function DumpOneLineData(line As String, key As String, fileIdx As Integer, color As String) As Boolean
+        If line.Contains(key) = True Then
+            Dim dataStartColId As Integer = line.IndexOf(key)
+            Dim extractedData As String = line.Substring(dataStartColId, line.Length - dataStartColId)
+
+            Print(fileIdx, "<font color=#" + color + ">" + Environment.NewLine)
+            Print(fileIdx, extractedData + Environment.NewLine)
+            Print(fileIdx, "</font>" + Environment.NewLine)
+            Print(fileIdx, "</br>" + Environment.NewLine)
+
+            Return True
+        End If
+
+        Return False
+    End Function
 
 End Module

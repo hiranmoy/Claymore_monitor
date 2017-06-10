@@ -42,6 +42,8 @@ Public Class Controller
 
         'start mining
         StartMining()
+
+        DumpData()
     End Sub
 
     'select button
@@ -103,6 +105,7 @@ Public Class Controller
     'load log file timer
     Private Sub LoadingTimer_Tick(sender As Object, e As EventArgs) Handles LoadingTimer.Tick
         CheckForActions()
+        DumpData()
     End Sub
 
 End Class

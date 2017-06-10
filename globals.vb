@@ -34,7 +34,7 @@ Module globals
     Public gCrashLog As String = My.Application.Info.DirectoryPath + "\crash.txt"
 
     'data log
-    Public gDataLog As String = My.Application.Info.DirectoryPath + "\data.txt"
+    Public gDataLog As String = My.Application.Info.DirectoryPath + "\data.html"
 
     'action
     Public gAction As Integer = 1

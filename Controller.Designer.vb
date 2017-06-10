@@ -152,9 +152,9 @@ Partial Class Controller
         Me.LogFilesLabel.Location = New System.Drawing.Point(24, 18)
         Me.LogFilesLabel.Name = "LogFilesLabel"
         Me.LogFilesLabel.Padding = New System.Windows.Forms.Padding(5)
-        Me.LogFilesLabel.Size = New System.Drawing.Size(56, 23)
+        Me.LogFilesLabel.Size = New System.Drawing.Size(124, 23)
         Me.LogFilesLabel.TabIndex = 6
-        Me.LogFilesLabel.Text = "Log files"
+        Me.LogFilesLabel.Text = "Log files ( last 20 logs )"
         '
         'OpenLogBt
         '
