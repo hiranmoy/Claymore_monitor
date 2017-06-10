@@ -38,6 +38,7 @@ Partial Class Controller
         Me.LogFilesLabel = New System.Windows.Forms.Label()
         Me.OpenLogBt = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.WorkerNameTb = New System.Windows.Forms.TextBox()
         CType(Me.WaitTimerVal, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ActionGrp.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
@@ -134,7 +135,7 @@ Partial Class Controller
         'LoadingTimer
         '
         Me.LoadingTimer.Enabled = True
-        Me.LoadingTimer.Interval = 60000
+        Me.LoadingTimer.Interval = 30000
         '
         'LogFilesList
         '
@@ -176,12 +177,21 @@ Partial Class Controller
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Log"
         '
+        'WorkerNameTb
+        '
+        Me.WorkerNameTb.Location = New System.Drawing.Point(250, 102)
+        Me.WorkerNameTb.Name = "WorkerNameTb"
+        Me.WorkerNameTb.Size = New System.Drawing.Size(100, 20)
+        Me.WorkerNameTb.TabIndex = 9
+        Me.WorkerNameTb.Text = "Miner01"
+        '
         'Controller
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.Linen
         Me.ClientSize = New System.Drawing.Size(518, 392)
+        Me.Controls.Add(Me.WorkerNameTb)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.ActionGrp)
         Me.Controls.Add(Me.ClaymoreFdLabel)
@@ -213,4 +223,5 @@ Partial Class Controller
     Friend WithEvents LogFilesLabel As Label
     Friend WithEvents OpenLogBt As Button
     Friend WithEvents GroupBox1 As GroupBox
+    Friend WithEvents WorkerNameTb As TextBox
 End Class

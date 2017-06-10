@@ -37,6 +37,9 @@ Public Class Controller
         RestoreSettings()
         gLoading = False
 
+        'delete crash log
+        DeleteCrashFileIfNeeded()
+
         'start mining
         StartMining()
     End Sub
@@ -99,7 +102,7 @@ Public Class Controller
 
     'load log file timer
     Private Sub LoadingTimer_Tick(sender As Object, e As EventArgs) Handles LoadingTimer.Tick
-        CheckForAction()
+        CheckForActions()
     End Sub
 
 End Class

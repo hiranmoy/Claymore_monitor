@@ -27,8 +27,14 @@
 
 Module globals
 
-    'filename
+    'settings file
     Public gSettingsFile As String = My.Application.Info.DirectoryPath + "\Settings.ini"
+
+    'crash log
+    Public gCrashLog As String = My.Application.Info.DirectoryPath + "\crash.txt"
+
+    'data log
+    Public gDataLog As String = My.Application.Info.DirectoryPath + "\data.txt"
 
     'action
     Public gAction As Integer = 1

@@ -135,20 +135,22 @@ Module utils
     End Function
 
     'take proper action if needed
-    Public Sub CheckForAction()
+    Public Sub CheckForActions()
         If gAction = 0 Then
             'do nothing
             Exit Sub
         End If
 
         Dim curFile As String = LoadLogFiles(Controller.ClaymoreFdLabel.Text)
-        Dim fileWrite As Date = My.Computer.FileSystem.GetFileInfo(curFile).LastWriteTime()
-        Dim curTime As DateTime = DateAndTime.Now
-        Dim timeDiff As TimeSpan = curTime - fileWrite
+        Dim fileWriteTime As Date = My.Computer.FileSystem.GetFileInfo(curFile).LastWriteTime()
+        Dim curTime As Date = Now
+        Dim timeDiff As TimeSpan = curTime - fileWriteTime
 
         If timeDiff.TotalMinutes < Controller.WaitTimerVal.Value Then
             Exit Sub
         End If
+
+        UpdateCrashLog(My.Computer.FileSystem.GetFileInfo(curFile).CreationTime(), fileWriteTime)
 
         Select Case gAction
             Case 1
@@ -168,6 +170,31 @@ Module utils
             Case Else
                 Debug.Assert(False)
         End Select
+    End Sub
+
+    'update crash log
+    Private Sub UpdateCrashLog(starTime As Date, endTime As Date)
+        DeleteCrashFileIfNeeded()
+
+        'dump settings
+        FileOpen(1, gCrashLog, OpenMode.Append)
+
+        'enable speech check
+        Print(1, "System started at " + starTime.ToString + " and crashed at " + endTime.ToString + Environment.NewLine)
+
+        FileClose(1)
+    End Sub
+
+    'delete crash log if it was not created today
+    Public Sub DeleteCrashFileIfNeeded()
+        If My.Computer.FileSystem.FileExists(gCrashLog) = False Then
+            Return
+        End If
+
+        If My.Computer.FileSystem.GetFileInfo(gCrashLog).LastWriteTime().Date <> Now.Date Then
+            'delete crash log
+            My.Computer.FileSystem.DeleteFile(gCrashLog)
+        End If
     End Sub
 
 End Module
