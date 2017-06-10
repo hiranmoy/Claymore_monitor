@@ -37,7 +37,10 @@ Module utils
             Exit Sub
         End If
 
-        gMiningProcess = Process.Start("explorer.exe", minefile)
+        Directory.SetCurrentDirectory(Controller.ClaymoreFdLabel.Text)
+        gMiningProcess = Process.Start(minefile)
+
+        My.Forms.Controller.WindowState = FormWindowState.Minimized
     End Sub
 
     'save enable speech check in a file
