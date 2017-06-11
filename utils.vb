@@ -279,6 +279,10 @@ Module utils
             End If
         Next
 
+        'time stamp
+        Print(1, "<br><br>" + Environment.NewLine)
+        DumpOneLineData(Now.ToString, "", 1, "008000")
+
         Print(1, "</body>" + Environment.NewLine)
         Print(1, "</html>" + Environment.NewLine)
 
@@ -290,9 +294,13 @@ Module utils
 
     'dump one line in html file
     Private Function DumpOneLineData(line As String, key As String, fileIdx As Integer, color As String) As Boolean
-        If line.Contains(key) = True Then
-            Dim dataStartColId As Integer = line.IndexOf(key)
-            Dim extractedData As String = line.Substring(dataStartColId, line.Length - dataStartColId)
+        If key = "" Or line.Contains(key) = True Then
+            Dim extractedData As String = line
+
+            If key <> "" Then
+                Dim dataStartColId As Integer = line.IndexOf(key)
+                extractedData = line.Substring(dataStartColId, line.Length - dataStartColId)
+            End If
 
             Print(fileIdx, "<font color=#" + color + ">" + Environment.NewLine)
             Print(fileIdx, extractedData + Environment.NewLine)
