@@ -135,7 +135,7 @@ Partial Class Controller
         'LoadingTimer
         '
         Me.LoadingTimer.Enabled = True
-        Me.LoadingTimer.Interval = 30000
+        Me.LoadingTimer.Interval = 60000
         '
         'LogFilesList
         '

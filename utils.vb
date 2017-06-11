@@ -225,8 +225,8 @@ Module utils
         Print(1, data + Environment.NewLine)
         FileClose(1)
 
-        Dim startLine As Integer = 0
-        Dim endLine As Integer = 0
+        Dim startLine As Integer = 1
+        Dim endLine As Integer = 1
 
         ' Open the file to read from.
         Dim readText() As String = File.ReadAllLines(tempFile)
@@ -268,12 +268,12 @@ Module utils
             End If
 
             'PASC total hashrate
-            If DumpOneLineData(line, "PASC - Total Speed:", 1, "0000FF") = True Then
+            If DumpOneLineData(line, "PASC - Total Speed:", 1, "FF8040") = True Then
                 Continue For
             End If
 
             'PASC hashrate in different gpus
-            If DumpOneLineData(line, "PASC: GPU0", 1, "008080") = True Then
+            If DumpOneLineData(line, "PASC: GPU0", 1, "804040") = True Then
                 Print(1, "<br>" + Environment.NewLine)
                 Continue For
             End If
@@ -304,5 +304,10 @@ Module utils
 
         Return False
     End Function
+
+    'upload files in zerodeos.000webhostapp.com
+    Public Sub UploadDataFile()
+        My.Computer.Network.UploadFile(gDataLog, "ftp://files.000webhost.com/public_html/index.html", "zerodeos", "gaming@3")
+    End Sub
 
 End Module
