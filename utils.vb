@@ -315,7 +315,10 @@ Module utils
 
     'upload files in zerodeos.000webhostapp.com
     Public Sub UploadDataFile()
-        My.Computer.Network.UploadFile(gDataLog, "ftp://files.000webhost.com/public_html/index.html", "zerodeos", "gaming@3")
+        Try
+            My.Computer.Network.UploadFile(gDataLog, "ftp://files.000webhost.com/public_html/index.html", "zerodeos", "gaming@3")
+        Catch
+        End Try
     End Sub
 
 End Module
