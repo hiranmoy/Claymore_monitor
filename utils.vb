@@ -315,6 +315,13 @@ Module utils
 
     'upload files in zerodeos.000webhostapp.com
     Public Sub UploadDataFile()
+        'write in rpi3 samba
+        Try
+            My.Computer.FileSystem.CopyFile(gDataLog, "\\RPI3\backups\data.html", True)
+        Catch
+        End Try
+
+        'ftp
         Try
             My.Computer.Network.UploadFile(gDataLog, "ftp://files.000webhost.com/public_html/index.html", "zerodeos", "gaming@3")
         Catch
