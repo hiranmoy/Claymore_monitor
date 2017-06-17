@@ -257,23 +257,23 @@ Module utils
             End If
 
             'ETH total hashrate
-            If DumpOneLineData(line, "ETH - Total Speed:", 1, "0000FF") = True Then
+            If DumpOneLineData(line, " - Total Speed:", 1, "0000FF") = True Then
                 Continue For
             End If
 
             'ETH hashrate in different gpus
-            If DumpOneLineData(line, "ETH: GPU0", 1, "008080") = True Then
+            If DumpOneLineData(line, ": GPU0", 1, "008080") = True Then
                 Print(1, "<br>" + Environment.NewLine)
                 Continue For
             End If
 
             'PASC total hashrate
-            If DumpOneLineData(line, "PASC - Total Speed:", 1, "FF8040") = True Then
+            If DumpOneLineData(line, " - Total Speed:", 1, "FF8040") = True Then
                 Continue For
             End If
 
             'PASC hashrate in different gpus
-            If DumpOneLineData(line, "PASC: GPU0", 1, "804040") = True Then
+            If DumpOneLineData(line, ": GPU0", 1, "804040") = True Then
                 Print(1, "<br>" + Environment.NewLine)
                 Continue For
             End If
@@ -295,15 +295,8 @@ Module utils
     'dump one line in html file
     Private Function DumpOneLineData(line As String, key As String, fileIdx As Integer, color As String) As Boolean
         If key = "" Or line.Contains(key) = True Then
-            Dim extractedData As String = line
-
-            If key <> "" Then
-                Dim dataStartColId As Integer = line.IndexOf(key)
-                extractedData = line.Substring(dataStartColId, line.Length - dataStartColId)
-            End If
-
             Print(fileIdx, "<font color=#" + color + ">" + Environment.NewLine)
-            Print(fileIdx, extractedData + Environment.NewLine)
+            Print(fileIdx, line + Environment.NewLine)
             Print(fileIdx, "</font>" + Environment.NewLine)
             Print(fileIdx, "</br>" + Environment.NewLine)
 
