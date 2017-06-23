@@ -239,6 +239,9 @@ Module utils
             End If
         Next
 
+        Dim firstCoins() As String = {"ETH", "ETC", "ZCASH"}
+        Dim secondCoins() As String = {"PASC", "PASL", "SC", "DCR"}
+
         'print requred info in dump file
         FileOpen(1, gDataLog, OpenMode.Output)
 
@@ -256,27 +259,31 @@ Module utils
                 Continue For
             End If
 
-            'ETH total hashrate
-            If DumpOneLineData(line, " - Total Speed:", 1, "0000FF") = True Then
-                Continue For
-            End If
+            For coinIdx = 0 To firstCoins.Length - 1
+                'ETH total hashrate
+                If DumpOneLineData(line, firstCoins(coinIdx) + " - Total Speed:", 1, "0000FF") = True Then
+                    Continue For
+                End If
 
-            'ETH hashrate in different gpus
-            If DumpOneLineData(line, ": GPU0", 1, "008080") = True Then
-                Print(1, "<br>" + Environment.NewLine)
-                Continue For
-            End If
+                'ETH hashrate in different gpus
+                If DumpOneLineData(line, firstCoins(coinIdx) + ": GPU0", 1, "008080") = True Then
+                    Print(1, "<br>" + Environment.NewLine)
+                    Continue For
+                End If
+            Next
 
-            'PASC total hashrate
-            If DumpOneLineData(line, " - Total Speed:", 1, "FF8040") = True Then
-                Continue For
-            End If
+            For coinIdx = 0 To secondCoins.Length - 1
+                'PASC total hashrate
+                If DumpOneLineData(line, secondCoins(coinIdx) + " - Total Speed:", 1, "FF8040") = True Then
+                    Continue For
+                End If
 
-            'PASC hashrate in different gpus
-            If DumpOneLineData(line, ": GPU0", 1, "804040") = True Then
-                Print(1, "<br>" + Environment.NewLine)
-                Continue For
-            End If
+                'PASC hashrate in different gpus
+                If DumpOneLineData(line, secondCoins(coinIdx) + ": GPU0", 1, "804040") = True Then
+                    Print(1, "<br>" + Environment.NewLine)
+                    Continue For
+                End If
+            Next
         Next
 
         'time stamp
@@ -295,8 +302,15 @@ Module utils
     'dump one line in html file
     Private Function DumpOneLineData(line As String, key As String, fileIdx As Integer, color As String) As Boolean
         If key = "" Or line.Contains(key) = True Then
+            Dim extractedData As String = line
+
+            If key <> "" Then
+                Dim dataStartColId As Integer = line.IndexOf(key)
+                extractedData = line.Substring(dataStartColId, line.Length - dataStartColId)
+            End If
+
             Print(fileIdx, "<font color=#" + color + ">" + Environment.NewLine)
-            Print(fileIdx, line + Environment.NewLine)
+            Print(fileIdx, extractedData + Environment.NewLine)
             Print(fileIdx, "</font>" + Environment.NewLine)
             Print(fileIdx, "</br>" + Environment.NewLine)
 
