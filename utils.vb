@@ -274,12 +274,12 @@ Module utils
 
             For coinIdx = 0 To secondCoins.Length - 1
                 'PASC total hashrate
-                If DumpOneLineData(line, secondCoins(coinIdx) + " - Total Speed:", 1, "FF8040") = True Then
+                If DumpOneLineData(line, " " + secondCoins(coinIdx) + " - Total Speed:", 1, "FF8040") = True Then
                     Continue For
                 End If
 
                 'PASC hashrate in different gpus
-                If DumpOneLineData(line, secondCoins(coinIdx) + ": GPU0", 1, "804040") = True Then
+                If DumpOneLineData(line, " " + secondCoins(coinIdx) + ": GPU0", 1, "804040") = True Then
                     Print(1, "<br>" + Environment.NewLine)
                     Continue For
                 End If
