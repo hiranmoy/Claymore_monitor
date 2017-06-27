@@ -210,11 +210,11 @@ Module utils
 
         ' set the file pointer to the beginning
         sReader.BaseStream.Seek(0, SeekOrigin.Begin)
-        Dim pos As Integer = Math.Max(sReader.BaseStream.Length - 50000, 0)
+        Dim pos As Integer = Math.Max(sReader.BaseStream.Length - 10000000, 0)
         sReader.BaseStream.Position = pos
 
-        'get last 50000 char
-        Dim buffer(50000) As Char
+        'get last 10000000 char
+        Dim buffer(10000000) As Char
         sReader.Read(buffer, 0, (sReader.BaseStream.Length - sReader.BaseStream.Position))
         Dim data As String = buffer
         sReader.DiscardBufferedData()
@@ -230,7 +230,19 @@ Module utils
 
         ' Open the file to read from.
         Dim readText() As String = File.ReadAllLines(tempFile)
-        For idx = 0 To readText.Length - 1
+
+        If readText.Length < 2 Then
+            Exit Sub
+        End If
+
+        'get time for first line
+        Dim firstLine As String = readText(1)
+        Dim timeInFirstLine As String = ""
+        If firstLine.Length > 8 Then
+            timeInFirstLine = firstLine.Substring(0, 8)
+        End If
+
+        For idx = 2 To readText.Length - 1
             Dim line As String = readText(idx)
 
             If line.Contains("GPU0 t=") = True Then
@@ -285,6 +297,11 @@ Module utils
                 End If
             Next
         Next
+
+        'get warnings
+        Dim warningCount As Integer = (data.Length - data.Replace("warning", String.Empty).Length) / 7
+        Print(1, "<br>" + Environment.NewLine)
+        DumpOneLineData("Number of warnings since " + timeInFirstLine + " : " + warningCount.ToString, "", 1, "FF0000")
 
         'time stamp
         Print(1, "<br><br>" + Environment.NewLine)
